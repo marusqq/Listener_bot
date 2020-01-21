@@ -1,0 +1,4 @@
+#ignore committing my hardcoded files
+/data.bin
+*.bin
+*.jpg
