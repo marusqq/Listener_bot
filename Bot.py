@@ -14,7 +14,10 @@ import pyotp
 #for password security
 import getpass
 
+#for sending mail
+import smtplib, ssl
 
+#for various things
 import sys
 
 
@@ -58,6 +61,29 @@ else:
 
 #-------------------------------------------------------
 
+def sendInfo(mes, subject = None):
+    '''this is used for sending a message to mail'''
+
+    port = 465  # For SSL
+    smtp_server = "smtp.gmail.com"
+    sender_email = data_arr[5]  # Enter your address
+    receiver_email = data_arr[5]  # Enter receiver address
+    password = data_arr[7]
+
+
+
+    message = """\
+Subject: """ + subject + """
+    \n""" + mes
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
+
+
+
 #log example                 
 #log.info("{} will be removed from {}".format(author_id, thread_id))S
 logfile = open('history.log', 'w+')
@@ -66,16 +92,75 @@ class ListenerBot(Client):
     def onMessage(self, author_id, message_object, thread_id, thread_type, **kwargs):
         if True: #and thread_id == data_arr[11] and thread_type == ThreadType.GROUP:   
 
+            #author_info = client.fetchUserInfo(author_id)
 
-            if message_object.text == "!help": and thread_id == data_arr[11] and thread_type == ThreadType.GROUP:
+            #print ('Name: {}'.format(author_info.name))
+            #print ('Message: {}'.format(message_object))
+
+            #print(author_info.name)
+            if message_object.text == "!help":
                 
-                self.send(Message(text = 'Hi, i am ListenBot.\nMy God and Creator is Marius Pozniakovas. Currently I have no skills but as far as I know my creator has lots of ideas one of them being a curse word counter'), thread_id = thread_id, thread_type = thread_type)
-                #log.info('!help used by: {}'.format(author_id))
+                self.send(Message(text = 'Hi, I am ListenBot.\nMy God and Creator is Marius Pozniakovas. Check !info for documentation (ᵔᴥᵔ)'), thread_id = thread_id, thread_type = thread_type)
+                log.info('!help used by: {}'.format(author_id))
                 logfile.write('!help used by: {}'.format(author_id))
 
 
 
+            elif '2iq' in message_object.text:
+                self.send(
+                    Message(text="Did you mean @Lukas Miezys? Opaaaaaaaaaaaaaaaaaaaaa", mentions=[Mention('100000491391008', offset=13, length=13)]),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
 
+            elif 'lexus' in message_object.text:
+                self.sendLocalImage(
+                    "photos/clapping_wojak.png",
+                    Message(text="Guys who buy Lexus cars in their 20's be like:"),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+
+            elif 'fat' in message_object.text or 'storas' in message_object.text:
+                self.sendLocalImage(
+                    "photos/fat_wojak.png",
+                    Message(text="mmmmmmmmmmmmmmmm"),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+
+            elif 'lenkas' in message_object.text:
+                self.send(
+                    Message(text="Did you mean @Rafal Michalkiewicz? Kurwa polski lewandowski", mentions=[Mention('100000494913408', offset=13, length=20)]),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+
+            
+            elif 'bmw' in message_object.text.lower() and author_id == '100001826192111':
+                self.sendLocalImage(
+                    "photos/tomas_wojak_bmw.png",
+                    Message(text="Want to see @Tomas Kučejevas in his 40s with his car????", mentions=[Mention('100001826192111', offset=12, length=16)]),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+            
+            elif message_object.text == "!info":
+                
+                self.send(
+                    Message(text="Documentation here: https://docs.google.com/document/d/1_vJeWceRharUbokmOCzBbbv7PLLXbL48T4QawdtNa9U"),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+
+            elif message_object.text == "!ideas":
+                
+                self.send(
+                    Message(text="Submit ideas here: https://docs.google.com/spreadsheets/d/1HQzbVy1QzeT962f_D4hBmlkM9_AHSKPlWTA9IxH9cfY"),
+                    thread_id=thread_id,
+                    thread_type=thread_type,
+                )
+            
             else:
                 # Sends the data to the inherited onMessage, so that we can still see when a message is recieved
                 super(ListenerBot, self).onMessage(
