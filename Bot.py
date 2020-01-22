@@ -1,5 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+__author__ = "Marius Pozniakovas"
+__email__ = "pozniakovui@gmail.com"
+'''script used for a bot which will be listening for messages'''
 
+#main libraries
 from fbchat import log, Client
 from fbchat.models import *
 
@@ -54,7 +59,7 @@ else:
 #-------------------------------------------------------
 
 #log example                 
-#log.info("{} will be removed from {}".format(author_id, thread_id))
+#log.info("{} will be removed from {}".format(author_id, thread_id))S
 logfile = open('history.log', 'w+')
 
 class ListenerBot(Client):
@@ -62,9 +67,9 @@ class ListenerBot(Client):
         if True: #and thread_id == data_arr[11] and thread_type == ThreadType.GROUP:   
 
 
-            if message_object.text == "!help": #and thread_id == data_arr[11] and thread_type == ThreadType.GROUP:
+            if message_object.text == "!help": and thread_id == data_arr[11] and thread_type == ThreadType.GROUP:
                 
-                self.send(Message(text = 'Hi, i am ListBot. '), thread_id = thread_id, thread_type = thread_type)
+                self.send(Message(text = 'Hi, i am ListenBot.\nMy God and Creator is Marius Pozniakovas. Currently I have no skills but as far as I know my creator has lots of ideas one of them being a curse word counter'), thread_id = thread_id, thread_type = thread_type)
                 #log.info('!help used by: {}'.format(author_id))
                 logfile.write('!help used by: {}'.format(author_id))
 
