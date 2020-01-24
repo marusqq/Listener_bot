@@ -1,4 +1,5 @@
 #ignore committing my hardcoded files
 /data.bin
+/reddit/
 *.bin
 *.jpg
