@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = "Marius Pozniakovas"
 __email__ = "pozniakovui@gmail.com"
-'''script used to send mail when needed'''
+'''module used to send mail when needed'''
 
 #for sending mail
 import smtplib, ssl

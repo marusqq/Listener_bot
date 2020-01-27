@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = "Marius Pozniakovas"
 __email__ = "pozniakovui@gmail.com"
-'''script for using reddit download command'''
+'''module for using reddit download pictures command'''
 
 #The guy who wrote the core as I only customised it:
 #   https://github.com/nobodyme/reddit-fetch
@@ -30,7 +30,6 @@ def get_and_send_photos_from_reddit(client, subreddit, top, images, t_id, t_type
 
     return
 
-#module for this photos thing
 def send_reddit_photos(client, subreddit, author_id, threadid, threadtype):
     '''sends photos from directory to facebook's thread, tags the author and also specifies what subreddit is used'''
 
@@ -53,18 +52,15 @@ def get_valid_filename(s):
     s = str(s).strip().replace(' ', '_')
     return re.sub(r'[^\w.]', '', s)[:200]
 
-#photos
 def erase_previous_line():
-    '''TODO'''
+    '''erases the previous line'''
     # cursor up one line
     sys.stdout.write("\033[F")
     # clear to the end of the line
     sys.stdout.write("\033[K")
 
-
-#photos
 def get_pictures_from_subreddit(data, subreddit, location):
-    '''TODO'''
+    '''the function that gets the images'''
     for i in range(len(data)):
         current_post = data[i]['data']
         image_url = current_post['url']
@@ -79,7 +75,7 @@ def get_pictures_from_subreddit(data, subreddit, location):
             continue
 
         erase_previous_line()
-        print('downloading pictures from r/' + subreddit +
+        print('Downloading pictures from r/' + subreddit +
               '.. ' + str((i*100)//len(data)) + '%')
 
         # redirects = False prevents thumbnails denoting removed images from getting in
@@ -92,10 +88,8 @@ def get_pictures_from_subreddit(data, subreddit, location):
             except:
                 pass
 
-
-
 def grab_pic(subreddit, top, image_count):
-    '''TODO'''
+    '''grabs the image from subreddit, sorted by top and counter by image_count'''
     colorama.init()
     ua = UserAgent(fallback='Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11')
 

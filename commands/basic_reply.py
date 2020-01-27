@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = "Marius Pozniakovas"
 __email__ = "pozniakovui@gmail.com"
-'''package which will be used for basic replies in chat'''
+'''module which will be used for basic replies in chat'''
 
 from fbchat.models import Message, Mention
 
@@ -58,6 +58,18 @@ def bmw(client, t_id, t_type):
     client.sendLocalImage(
     "photos/tomas_wojak_bmw.png",
     Message(text="Want to see @Tomas Kučejevas in his 40s with his car????", mentions=[Mention('100001826192111', offset=12, length=16)]),
+    thread_id=t_id,
+    thread_type=t_type,
+    )
+
+    return
+
+def n_patrol(client, t_id, t_type):
+    '''sends an angry policy officer with question for n pass'''
+
+    client.sendLocalImage(
+    "photos/n_patrol.jpg",
+    Message(text="Please show me your N word pass or YOU WILL BE DETAINED!"),
     thread_id=t_id,
     thread_type=t_type,
     )

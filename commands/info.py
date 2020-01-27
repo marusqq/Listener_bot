@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = "Marius Pozniakovas"
 __email__ = "pozniakovui@gmail.com"
-'''package which will be used for basic information in chat'''
+'''module which will be used for basic information in chat'''
 
 from fbchat.models import Message, Mention
 
