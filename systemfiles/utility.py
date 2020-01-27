@@ -28,3 +28,9 @@ def totp(code):
     print('TOTP code ----> ' + str(code))
 
     return code
+
+def get_name(client, id):
+
+    user_data = client.fetchUserInfo(id)
+    
+    return str(user_data[id].name)

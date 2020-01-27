@@ -24,10 +24,17 @@ from fbchat.models import Message, Mention
 def decide(client, message, thread_id, thread_type, author_id):
     '''function that decides what job to do, if None, returns False'''
 
+    #get the name of the author_id for better information usage
+    author_name = systemfiles.utility.get_name(client, author_id)
+
+
     #if we don't find any command we return false
     command_found = False
 
-    words = message.split()
+    if message is None:
+        words = []
+    else:
+        words = message.split()
 
     for i in range(0, len(words)):
 
@@ -38,7 +45,7 @@ def decide(client, message, thread_id, thread_type, author_id):
                 
                 if (words[i+2] == 'day' or words[i+2] == 'week' or
                 words[i+2] == 'month' or words[i+2] == 'year' or 
-                words[i+2] == 'all') and words[i+3].isdigit():
+                words[i+2] == 'all') and words[i+3].isdigit() and words[i+3] != '0':
 
                     #send to command if everything is ok
                     command_found = True
@@ -51,7 +58,7 @@ def decide(client, message, thread_id, thread_type, author_id):
 
                     #delete the downloaded files
                     systemfiles.utility.delete_dir(str(os.getcwd()) + '/reddit/' + words[i+1] + '/')
-                    systemfiles.log.log(author_id, '!topreddit used')
+                    systemfiles.log.log(author_name, '!topreddit ' + str(words[i+1]) + ' ' + str(words[i+2]) + ' ' + str( words[i+3]) + ' used')
 
                     i = i + 3
 
@@ -74,47 +81,47 @@ def decide(client, message, thread_id, thread_type, author_id):
 
         elif i == 0 and words[i] == '!help':
             command_found = True
-            systemfiles.log.log(author_id, '!help used')
+            systemfiles.log.log(author_name, '!help used')
             commands.info.help(client, thread_id, thread_type)
 
         elif i == 0 and words[i] == '!info':
             command_found = True
-            systemfiles.log.log(author_id, '!info used')
+            systemfiles.log.log(author_name, '!info used')
             commands.info.documentation(client, thread_id, thread_type)
             
         elif i == 0 and words[i] == '!ideas':
             command_found = True
-            systemfiles.log.log(author_id, '!ideas used')
+            systemfiles.log.log(author_name, '!ideas used')
             commands.info.ideas(client, thread_id, thread_type)
         
         elif words[i] == '2iq':
             command_found = True
-            systemfiles.log.log(author_id, '2iq printed')
+            systemfiles.log.log(author_name, '2iq printed')
             commands.basic_reply.two_iq(client, thread_id, thread_type)
 
         elif words[i] == 'lexus':
             command_found = True
-            systemfiles.log.log(author_id, 'lexus used')
+            systemfiles.log.log(author_name, 'lexus used')
             commands.basic_reply.lexus(client, thread_id, thread_type)
 
         elif words[i] == 'fat' or words[i] == 'storas':
             command_found = True
-            systemfiles.log.log(author_id, 'fat used')
+            systemfiles.log.log(author_name, 'fat used')
             commands.basic_reply.fat(client, thread_id, thread_type)
 
         elif words[i] == 'lenkas':
             command_found = True
-            systemfiles.log.log(author_id, 'lenkas used')
+            systemfiles.log.log(author_name, 'lenkas used')
             commands.basic_reply.polish(client, thread_id, thread_type)
         
         elif words[i] == 'lenkas' and author_id == '100001826192111':
             command_found = True
-            systemfiles.log.log(author_id, 'bmw used')
+            systemfiles.log.log(author_name, 'bmw used')
             commands.basic_reply.bmw(client, thread_id, thread_type)
 
         elif words[i] == 'nigger' or words[i] == 'nigeri' or words[i] == 'nigeris':
             command_found = True
-            systemfiles.log.log(author_id, 'N word said')
+            systemfiles.log.log(author_name, 'N word said')
             commands.basic_reply.n_patrol(client, thread_id, thread_type)
     
     return command_found
