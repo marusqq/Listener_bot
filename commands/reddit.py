@@ -18,6 +18,9 @@ import re
 import requests
 import sys
 
+#use utility for getting name
+import systemfiles.utility
+
 #this is needed for message and mention parameters
 from fbchat.models import Message, Mention
 
@@ -33,19 +36,45 @@ def get_and_send_photos_from_reddit(client, subreddit, top, images, t_id, t_type
 def send_reddit_photos(client, subreddit, author_id, threadid, threadtype):
     '''sends photos from directory to facebook's thread, tags the author and also specifies what subreddit is used'''
 
-    code_dir = 'C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/' + 'reddit/' 
+    code_dir = 'C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/' + 'downloaded_photos/reddit/' 
     reddit_photos_dir = code_dir + subreddit
     reddit_photos = os.listdir(reddit_photos_dir)
-    
-    for photo in reddit_photos:
+
+    #if we have atleast one photo
+    if len(reddit_photos) > 0:
+
+        author_name = systemfiles.utility.get_name(client, author_id)
+
+        #first what we did
+        client.send(
+            Message(text='Photos asked by: ' + author_name + ', ' + str(len(reddit_photos)) + ' photos from [r/' + subreddit + '] below:', 
+            mentions=[Mention(author_id, offset=17, length=len(author_name))]),
+            thread_id=threadid,
+            thread_type=threadtype,
+        )
         
-        client.sendLocalImage(
-                    reddit_photos_dir + '/' + photo,
-                    Message(text='Author: this_guy, photo from: ' + subreddit, 
-                    mentions=[Mention(author_id, offset=8, length=8)]),
-                    thread_id=threadid,
-                    thread_type=threadtype,
+        #send all photos
+        for photo in reddit_photos:
+            
+            client.sendLocalImage(
+                reddit_photos_dir + '/' + photo,
+                thread_id=threadid,
+                thread_type=threadtype,
                 )
+
+        return 
+
+    #if we have less than 1 photo
+    else:
+        #no photos was used
+        client.send(
+            Message(text='No photos downloaded from [r/' + subreddit + ']'), 
+            thread_id=threadid,
+            thread_type=threadtype,
+        )
+
+        return
+
 
 def get_valid_filename(s):
     ''' strips out special characters and replaces spaces with underscores, len 200 to avoid file_name_too_long error '''
@@ -98,8 +127,8 @@ def grab_pic(subreddit, top, image_count):
         top + '&limit=' + image_count
     response = requests.get(url, headers={'User-agent': ua.random})
     
-    if os.path.exists('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/reddit/'):
-        location = os.path.join('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/reddit/', subreddit)
+    if os.path.exists('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/downloaded_photos/reddit/'):
+        location = os.path.join('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/downloaded_photos/reddit/', subreddit)
 
     else:
         print('Given path does not exist, try without the location parameter to default to the current directory')
@@ -117,7 +146,10 @@ def grab_pic(subreddit, top, image_count):
     print('Downloading pictures from r/' + subreddit + '..')
 
     data = response.json()['data']['children']
-    get_pictures_from_subreddit(data, subreddit, location)
+    try:
+        get_pictures_from_subreddit(data, subreddit, location)
+    except:
+        print('getting pictures from r/' + subreddit + ' failed')
     erase_previous_line()
 
     print('Downloaded pictures from r/' + subreddit)
