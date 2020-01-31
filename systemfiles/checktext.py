@@ -43,7 +43,7 @@ def decide(client, message, thread_id, thread_type, author_id):
         if i == 0 and words[i] == '!topreddit':
 
             #check if there is atleast 4 words
-            if not len(words) < 3:
+            if not len(words) < 4:
                 
                 if (words[i+2] == 'day' or words[i+2] == 'week' or
                 words[i+2] == 'month' or words[i+2] == 'year' or 
@@ -63,7 +63,7 @@ def decide(client, message, thread_id, thread_type, author_id):
                     systemfiles.utility.delete_dir(str(os.getcwd()) + '/reddit/' + words[i+1] + '/')
 
                     #skip few words
-                    i = i + 3
+                    i = i + 4
 
                 #not day/week/month/year/all or image_count not a number:
                 else:
@@ -86,19 +86,28 @@ def decide(client, message, thread_id, thread_type, author_id):
         elif i == 0 and words[i] == '!google':
 
             #check if we have enough words for keyword and image_limit
-            if not len(words) < 2:
+            if not len(words) < 3:
                 
                 #check image_limit
                 if words[i+2].isdigit() and words[i+2] != '0':
 
                     command_found = True
+                    #log it
                     systemfiles.log.log(author_name, '!google ' + str(words[i+1]) + ' ' + str(words[i+2]) + ' used')
+                    
+                    #do it
                     commands.google.google_photos(
                         client, 
                         words[i+1], words[i+2],
                         thread_id, thread_type,
                         author_id
                     )
+
+                    #delete files
+                    systemfiles.utility.delete_dir(str(os.getcwd()) + '/downloads/' + words[i+1] + '/')
+
+                    #skip words then
+                    i = i + 3
                 
                 else:
                     #send the usage
