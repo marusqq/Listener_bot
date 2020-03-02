@@ -44,7 +44,8 @@ def download_photos(keywords, image_limit):
         "keywords":keywords,
         "limit":image_limit,
         "print_urls":False,
-        "safe_search":True
+        "safe_search":True,
+        "output_directory": os.getcwd() + '/downloaded_photos/google'
     }
 
     paths,errors = response.download(arguments)
@@ -54,7 +55,7 @@ def download_photos(keywords, image_limit):
 def send_google_photos_to_fb(client, keywords, author_id, threadid, threadtype):
     '''sends photos from directory to facebook's thread, tags the author and also specifies what subreddit is used'''
 
-    code_dir = 'C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/downloads/' #+ 'downloaded_photos/google/' 
+    code_dir = os.getcwd() +  '/downloaded_photos/google/' 
     google_photos_dir = code_dir + keywords
     google_photos = os.listdir(google_photos_dir)
 
