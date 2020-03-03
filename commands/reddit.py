@@ -36,7 +36,7 @@ def get_and_send_photos_from_reddit(client, subreddit, top, images, t_id, t_type
 def send_reddit_photos(client, subreddit, author_id, threadid, threadtype):
     '''sends photos from directory to facebook's thread, tags the author and also specifies what subreddit is used'''
 
-    code_dir = 'C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/' + 'downloaded_photos/reddit/' 
+    code_dir = os.getcwd() + '/downloaded_photos/reddit/'
     reddit_photos_dir = code_dir + subreddit
     reddit_photos = os.listdir(reddit_photos_dir)
 
@@ -47,28 +47,28 @@ def send_reddit_photos(client, subreddit, author_id, threadid, threadtype):
 
         #first what we did
         client.send(
-            Message(text='Photos asked by: ' + author_name + ', ' + str(len(reddit_photos)) + ' photos from [r/' + subreddit + '] below:', 
+            Message(text='Photos asked by: ' + author_name + ', ' + str(len(reddit_photos)) + ' photos from [r/' + subreddit + '] below:',
             mentions=[Mention(author_id, offset=17, length=len(author_name))]),
             thread_id=threadid,
             thread_type=threadtype,
         )
-        
+
         #send all photos
         for photo in reddit_photos:
-            
+
             client.sendLocalImage(
                 reddit_photos_dir + '/' + photo,
                 thread_id=threadid,
                 thread_type=threadtype,
                 )
 
-        return 
+        return
 
     #if we have less than 1 photo
     else:
         #no photos was used
         client.send(
-            Message(text='No photos downloaded from [r/' + subreddit + ']'), 
+            Message(text='No photos downloaded from [r/' + subreddit + ']'),
             thread_id=threadid,
             thread_type=threadtype,
         )
@@ -126,9 +126,9 @@ def grab_pic(subreddit, top, image_count):
     url = 'https://www.reddit.com/r/' + subreddit + '/top/.json?sort=top&t=' + \
         top + '&limit=' + image_count
     response = requests.get(url, headers={'User-agent': ua.random})
-    
-    if os.path.exists('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/downloaded_photos/reddit/'):
-        location = os.path.join('C:/Users/marius.pozniakovas/Desktop/randomPyScripts/Listener_bot/downloaded_photos/reddit/', subreddit)
+
+    if os.path.exists(os.getcwd() + '/downloaded_photos/reddit/'):
+        location = os.path.join(os.getcwd() + '/downloaded_photos/reddit/', subreddit)
 
     else:
         print('Given path does not exist, try without the location parameter to default to the current directory')
@@ -142,7 +142,7 @@ def grab_pic(subreddit, top, image_count):
         os.mkdir(location)
     # notify connected and downloading pictures from subreddit
     erase_previous_line()
-    
+
     print('Downloading pictures from r/' + subreddit + '..')
 
     data = response.json()['data']['children']
@@ -153,4 +153,3 @@ def grab_pic(subreddit, top, image_count):
     erase_previous_line()
 
     print('Downloaded pictures from r/' + subreddit)
-
